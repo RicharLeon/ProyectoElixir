@@ -108,22 +108,24 @@ defmodule Calculator do
     end
   end
 
-
-
   defp ecuacion_recta do
 
     IO.puts("Ecuación de la recta")
 
     # Función auxiliar para validar puntos
-    validar_punto = fn (mensaje, nombre_punto) ->
+    validar_punto = fn (mensaje) ->
       IO.gets(mensaje)
       |> String.trim()
       |> case do
-        "" -> {:error, "Entrada vacía para #{nombre_punto}"}
+        "" -> {:error, "Entrada vacía"}
         input ->
           case Float.parse(input) do
-            {valor, _} -> {:ok, valor}
-            :error -> {:error, "Valor numérico inválido para #{nombre_punto}"}
+            {valor, _} when valor > 0 ->
+              {:ok, valor}
+            {valor, _} ->
+              {:error, "El cateto no puede ser negativo o cero"}
+            :error ->
+              {:error, "Debes ingresar un número válido"}
           end
       end
     end
@@ -131,28 +133,14 @@ defmodule Calculator do
     # Validar todos los puntos usando with
     with {:ok, x1} <- validar_punto.("Ingrese el punto 1 (x1): ", "x1"),
           {:ok, y1} <- validar_punto.("Ingrese el punto 1 (y1): ", "y1"),
-          {:ok, x2} <- validar_punto.("Ingrese el punto 2 (x2): ", "x2"),
-          {:ok, y2} <- validar_punto.("Ingrese el punto 2 (y2): ", "y2") do
+          {:ok, x2} <- validar_punto.("Ingrese el punto 2 (x2): ", "x2") do
 
-      # Cálculo de la pendiente
-      m = (y2 - y1) / (x2 - x1)
-
-      # Cálculo de la ordenada al origen
-      b = y1 - m * x1
-
-      # Formatear ecuación
-      ecuacion = case {m, b} do
-        {0, b} -> "y = #{Float.round(b, 4)}"
-        {m, 0} -> "y = #{Float.round(m, 4)}x"
-        {m, b} when b < 0 -> "y = #{Float.round(m, 4)}x - #{Float.round(abs(b), 4)}"
-        {m, b} -> "y = #{Float.round(m, 4)}x + #{Float.round(b, 4)}"
-      end
-
-        IO.puts("La ecuación de la recta es: #{ecuacion}")
-
+        resultado = EcuacionRecta.ecuacion_recta(x1, y1, x2)
+        IO.puts("Resultado: #{resultado}")
     else
-        {:error, motivo} ->
-          IO.puts("Error: #{motivo}")
+      {:error, motivo} ->
+        IO.puts("Error: #{motivo}")
+
     end
 
   end
