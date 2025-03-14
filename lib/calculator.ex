@@ -131,9 +131,9 @@ defmodule Calculator do
     end
 
     # Validar todos los puntos usando with
-    with {:ok, x1} <- validar_punto.("Ingrese el punto 1 (x1): ", "x1"),
-          {:ok, y1} <- validar_punto.("Ingrese el punto 1 (y1): ", "y1"),
-          {:ok, x2} <- validar_punto.("Ingrese el punto 2 (x2): ", "x2") do
+    with {:ok, x1} <- validar_punto.("Ingrese el punto 1 (x1): "),
+          {:ok, y1} <- validar_punto.("Ingrese el punto 1 (y1): "),
+          {:ok, x2} <- validar_punto.("Ingrese el punto 2 (x2): ") do
 
         resultado = EcuacionRecta.ecuacion_recta(x1, y1, x2)
         IO.puts("Resultado: #{resultado}")
