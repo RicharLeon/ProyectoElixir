@@ -108,6 +108,8 @@ defmodule Calculator do
     end
   end
 
+
+
   defp ecuacion_recta do
 
     IO.puts("Ecuación de la recta")
